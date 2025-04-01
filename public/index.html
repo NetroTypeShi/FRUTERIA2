@@ -1,68 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Frutas</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frutas</title>
 </head>
 <body>
-    <form id = ""></form>
-    <button type="submit">Enviar</button>
-    <ul id = "lista-frutas"></ul>
-    <script>
-        const formulario = document.querySelector('#fruta-form');
-        const listafrutas = document.querySelector("#lista-frutas");
-        obtenerfrutas();
-        formulario.addEventListener("submit", function(event){
-            event.preventDefault();
-            const fruta = document.querySelector("#fruta").value;
-            console.log(fruta);
-            const opciones = {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({fruta})
-            }
-            fetch("/frutas", opciones)
-            .then(response => response.json())
-            .then(frutas=>{
-                frutas.forEach(fruta =>{
-                    
-                    obtenerfrutas();
-                })
-            })
-            //fruta = data.fruta;
-            //frutaElemento = document.createElement("ul");
-            //document.body.appendChild(frutaElemento);
-            //for(let i = 0; i< fruta.length; i++){
-              //  const item = document.createElement("li");
-                //item.innerText = fruta[i];
-            //}
-        })
-        fetch("/frutas", opciones)
-            .then(response => response.json())
-            .then(frutas=>{
-                frutas.forEach(fruta =>{
-                    obtenerfrutas();
-                })
-            })
-            const frutasDiccionario = {
-                "manzana": "🍏"
-            }
-            function obtenerfrutas(){
-                listafrutas.innerHTML = "";
-                fetch("/frutas")
-                .then(response => response.json())
-                .then(frutas=>{
-                    frutas.forEach(fruta =>{
-                        const li = document.createElement("li")
-                    li.innerText = frutasDiccionario[fruta] || fruta;
-                    listafrutas.appendChild(li)
-                    })
-                    
-                })
-            }
-    </script>
+
+  <form id="fruta-form">
+   
+    <input type="text" id="fruta" placeholder="Ingrese una fruta" required>
+    
+  </form>
+  <ul id="lista-frutas"></ul>
+
+  <script>
+    const formulario = document.querySelector('#fruta-form');
+    const listafrutas = document.querySelector("#lista-frutas");
+
+    
+    function obtenerfrutas(){
+      listafrutas.innerHTML = "";
+      fetch("/frutas")
+        .then(response => response.json())
+        .then(frutas => {
+          frutas.forEach(fruta => {
+            const li = document.createElement("li");
+            li.innerText = frutasDiccionario[fruta] || fruta;
+            listafrutas.appendChild(li);
+          });
+        });
+    }
+
+    
+    const frutasDiccionario = {
+      "manzana": "🍏"
+    };
+
+    
+    obtenerfrutas();
+
+   
+    formulario.addEventListener("submit", function(event){
+      event.preventDefault();
+      const fruta = document.querySelector("#fruta").value;
+      
+      const opciones = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({fruta})
+      };
+
+      fetch("/frutas", opciones)
+        .then(response => response.json())
+        .then(frutas => {
+          
+          obtenerfrutas();
+        });
+
+      
+      formulario.reset();
+    });
+  </script>
 </body>
 </html>
